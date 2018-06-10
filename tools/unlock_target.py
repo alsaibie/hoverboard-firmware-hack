@@ -1,12 +1,7 @@
 Import('env')
 from base64 import b64decode
 
-#
-# Dump build environment (for debug)
-# print env.Dump()
-#
 
-env.Replace(UPLOADHEXCMD='"$UPLOADER" ' + b64decode(ARGUMENTS.get("CUSTOM_OPTION")) + ' --uploader --flags')
+print "Unlock Target!"
+env.Execute('openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c init -c "reset halt" -c "stm32f1x unlock 0"')
 
-# uncomment line below to see environment variables
-# print ARGUMENTS

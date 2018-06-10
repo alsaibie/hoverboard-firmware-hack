@@ -3,7 +3,7 @@
 #include "defines.h"
 #include "setup.h"
 #include "config.h"
-
+#include "bldc.h"
 
 volatile int posl = 0;
 volatile int posr = 0;
@@ -36,7 +36,7 @@ const uint8_t hall_to_pos[8] = {
     0,
 };
 
-inline void blockPWM(int pwm, int pos, int *u, int *v, int *w) {
+void blockPWM(int pwm, int pos, int *u, int *v, int *w) {
   switch(pos) {
     case 0:
       *u = 0;
@@ -75,7 +75,7 @@ inline void blockPWM(int pwm, int pos, int *u, int *v, int *w) {
   }
 }
 
-inline void blockPhaseCurrent(int pos, int u, int v, int *q) {
+void blockPhaseCurrent(int pos, int u, int v, int *q) {
   switch(pos) {
     case 0:
       *q = u - v;
