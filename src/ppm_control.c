@@ -27,7 +27,7 @@
 TIM_HandleTypeDef TimHandle;
 
 uint8_t ppm_count = 0;
-uint16_t ppm_captured_value[PPM_NUM_CHANNELS + 1] = {500, 500};
+volatile uint16_t ppm_captured_value[PPM_NUM_CHANNELS + 1] = {500, 500};
 uint16_t ppm_captured_value_buffer[PPM_NUM_CHANNELS+1] = {500, 500};
 uint32_t ppm_timeout = 0;
 

@@ -55,17 +55,21 @@ int main(void) {
 
         HAL_Delay(5);
 
-        /* Grab new control input setpoint */
+        /* Grab new control input setpoint from ppm driver TODO: make atomic */
         cmd1 = CLAMP((ppm_captured_value[0] - 500) * 2, -1000, 1000);
         cmd2 = CLAMP((ppm_captured_value[1] - 500) * 2, -1000, 1000);
 
         float scale = ppm_captured_value[2] / 1000.0f;
+
+        /* Control Command */
+        //TODO: Switch between differential drive or independent control mode here.
 
         // ####### LOW-PASS FILTER #######
         steer = (int)(steer * (1.0 - FILTER) + cmd1 * FILTER);
         speed = (int)(speed * (1.0 - FILTER) + cmd2 * FILTER);
 
         // ####### MIXER ####### TODO: Clean this
+
         speedR = (int)CLAMP(speed * SPEED_COEFFICIENT - steer * STEER_COEFFICIENT, -1000, 1000);
         speedL = (int)CLAMP(speed * SPEED_COEFFICIENT + steer * STEER_COEFFICIENT, -1000, 1000);
 
@@ -75,7 +79,7 @@ int main(void) {
         setScopeChannel(2, (int16_t)speedR);
         setScopeChannel(3, (int16_t)speedL);
 
-        // ####### SET OUTPUTS #######
+        // ####### SET OUTPUTS to BLDC Controller #######
         if ((speedL < lastSpeedL + 50 && speedL > lastSpeedL - 50) &&
             (speedR < lastSpeedR + 50 && speedR > lastSpeedR - 50) && timeout < TIMEOUT) {
 
@@ -84,11 +88,11 @@ int main(void) {
         pwml = left_m_inversion * speedL;
 
         }
-        else if (timeout >= TIMEOUT){
-            /* Should call slow down routine if no command is received within a certain time? */
+//        else if (timeout >= TIMEOUT){
+//            /* Should call slow down routine if no command is received within a certain time? */
 //            pwmr = 0;
 //            pwml = 0;
-        }
+//        }
 
         lastSpeedL = speedL;
         lastSpeedR = speedR;
@@ -111,6 +115,7 @@ int main(void) {
 
             HAL_GPIO_WritePin(OFF_PORT, OFF_PIN, GPIO_PIN_RESET);
 
+            /* Exit */
             loop_running = 0;
         }
 
@@ -132,6 +137,7 @@ int main(void) {
 
             HAL_GPIO_WritePin(OFF_PORT, OFF_PIN, GPIO_PIN_RESET);
 
+            /* Exit */
             loop_running = 0;
 
         } else {

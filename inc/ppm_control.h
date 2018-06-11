@@ -7,7 +7,7 @@
 #include "common.h"
 /* Global Shared Variables TODO: make them thread safe */
 /* PPM Value Buffer */
-extern uint16_t ppm_captured_value[PPM_NUM_CHANNELS + 1];
+extern volatile uint16_t ppm_captured_value[PPM_NUM_CHANNELS + 1];
 
 void PPM_Init(void);
 

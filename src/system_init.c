@@ -41,7 +41,7 @@ pb10 usart3 dma1 channel2/3
 TIM_HandleTypeDef htim_right;
 TIM_HandleTypeDef htim_left;
 ADC_HandleTypeDef hadc1;
-ADC_HandleTypeDef hadc2;
+//ADC_HandleTypeDef hadc2;
 
 extern uint8_t buzzerFreq;
 
@@ -62,9 +62,9 @@ void System_Init() {
 
   MX_TIM_Init();
 
-  MX_ADC1_Init();
+  MX_ADC_Motors_Init();
 
-  MX_ADC2_Init();
+//  MX_ADC2_Init();
 
   UART_Init();
 
@@ -402,7 +402,7 @@ void MX_TIM_Init(void) {
   __HAL_TIM_ENABLE(&htim_right);
 }
 
-void MX_ADC1_Init(void) {
+void MX_ADC_Motors_Init(void) {
 
   ADC_MultiModeTypeDef multimode;
   ADC_ChannelConfTypeDef sConfig;
@@ -468,51 +468,51 @@ void MX_ADC1_Init(void) {
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 }
 
-void MX_ADC2_Init(void) {
-  ADC_ChannelConfTypeDef sConfig;
-
-  __HAL_RCC_ADC2_CLK_ENABLE();
-
-  hadc2.Instance                   = ADC2;
-  hadc2.Init.ScanConvMode          = ADC_SCAN_ENABLE;
-  hadc2.Init.ContinuousConvMode    = DISABLE;
-  hadc2.Init.DiscontinuousConvMode = DISABLE;
-  hadc2.Init.ExternalTrigConv      = ADC_SOFTWARE_START;
-  hadc2.Init.DataAlign             = ADC_DATAALIGN_RIGHT;
-  hadc2.Init.NbrOfConversion       = 5;
-  HAL_ADC_Init(&hadc2);
-
-  sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
-
-  sConfig.Channel = ADC_CHANNEL_15;
-  sConfig.Rank    = 1;
-  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
-
-  sConfig.Channel = ADC_CHANNEL_13;
-  sConfig.Rank    = 2;
-  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
-
-  sConfig.SamplingTime = ADC_SAMPLETIME_13CYCLES_5;
-
-  sConfig.Channel = ADC_CHANNEL_10;
-  sConfig.Rank    = 3;
-  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
-
-  sConfig.Channel = ADC_CHANNEL_2;
-  sConfig.Rank    = 4;
-  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
-
-  sConfig.Channel = ADC_CHANNEL_3;
-  sConfig.Rank    = 5;
-  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
-
-  hadc2.Instance->CR2 |= ADC_CR2_DMA;
-  __HAL_ADC_ENABLE(&hadc2);
-}
+//void MX_ADC2_Init(void) {
+//  ADC_ChannelConfTypeDef sConfig;
+//
+//  __HAL_RCC_ADC2_CLK_ENABLE();
+//
+//  hadc2.Instance                   = ADC2;
+//  hadc2.Init.ScanConvMode          = ADC_SCAN_ENABLE;
+//  hadc2.Init.ContinuousConvMode    = DISABLE;
+//  hadc2.Init.DiscontinuousConvMode = DISABLE;
+//  hadc2.Init.ExternalTrigConv      = ADC_SOFTWARE_START;
+//  hadc2.Init.DataAlign             = ADC_DATAALIGN_RIGHT;
+//  hadc2.Init.NbrOfConversion       = 5;
+//  HAL_ADC_Init(&hadc2);
+//
+//  sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
+//
+//  sConfig.Channel = ADC_CHANNEL_15;
+//  sConfig.Rank    = 1;
+//  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
+//
+//  sConfig.Channel = ADC_CHANNEL_13;
+//  sConfig.Rank    = 2;
+//  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
+//
+//  sConfig.SamplingTime = ADC_SAMPLETIME_13CYCLES_5;
+//
+//  sConfig.Channel = ADC_CHANNEL_10;
+//  sConfig.Rank    = 3;
+//  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
+//
+//  sConfig.Channel = ADC_CHANNEL_2;
+//  sConfig.Rank    = 4;
+//  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
+//
+//  sConfig.Channel = ADC_CHANNEL_3;
+//  sConfig.Rank    = 5;
+//  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
+//
+//  hadc2.Instance->CR2 |= ADC_CR2_DMA;
+//  __HAL_ADC_ENABLE(&hadc2);
+//}
 
 void ADC_Start(){
 
   HAL_ADC_Start(&hadc1);
-  HAL_ADC_Start(&hadc2);
+//  HAL_ADC_Start(&hadc2);
 
 }

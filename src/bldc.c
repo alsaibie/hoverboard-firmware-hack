@@ -42,6 +42,8 @@ const uint8_t hall_to_pos[8] = {
     0,
 };
 
+// TODO: Construct a map instead of switch statement
+
 void blockPWM(int pwm, int pos, int *u, int *v, int *w) {
   switch(pos) {
     case 0:
@@ -85,45 +87,20 @@ void blockPhaseCurrent(int pos, int u, int v, int *q) {
   switch(pos) {
     case 0:
       *q = u - v;
-      // *u = 0;
-      // *v = pwm;
-      // *w = -pwm;
       break;
     case 1:
-      *q = u;
-      // *u = -pwm;
-      // *v = pwm;
-      // *w = 0;
-      break;
     case 2:
       *q = u;
-      // *u = -pwm;
-      // *v = 0;
-      // *w = pwm;
       break;
     case 3:
-      *q = v;
-      // *u = 0;
-      // *v = -pwm;
-      // *w = pwm;
-      break;
     case 4:
       *q = v;
-      // *u = pwm;
-      // *v = -pwm;
-      // *w = 0;
       break;
     case 5:
       *q = -(u - v);
-      // *u = pwm;
-      // *v = 0;
-      // *w = -pwm;
       break;
     default:
       *q = 0;
-      // *u = 0;
-      // *v = 0;
-      // *w = 0;
   }
 }
 
@@ -137,7 +114,7 @@ int offsetrr2   = 2000;
 int offsetdcl   = 2000;
 int offsetdcr   = 2000;
 
-float batteryVoltage = 40.0;
+float batteryVoltage = 40.0; /* Initial Battery Voltage TODO: Move elsewhere */
 
 int curl = 0;
 // int errorl = 0;
@@ -175,17 +152,6 @@ void DMA1_Channel1_IRQHandler() {
   if (buzzerTimer % 100 == 0) {
     batteryVoltage = (float)(batteryVoltage * 0.999 + ((float)adc_buffer.batt1 * ADC_BATTERY_VOLT) * 0.001);
   }
-
-
-  #ifdef BEEPS_BACKWARD
-    if (speed < -50 && enable == 1) {
-      buzzerFreq = 5;
-      buzzerPattern = 1;
-    } else if (enable == 1) {
-      buzzerFreq = 0;
-      buzzerPattern = 1;
-    }
-  #endif
 
 
   //disable PWM when current limit is reached (current chopping)
