@@ -1,24 +1,18 @@
-#include "stm32f1xx_hal.h"
-#include "defines.h"
-#include "setup.h"
-#include "config.h"
+
+#include "common.h"
 #include "stdio.h"
 #include "string.h"
 
 UART_HandleTypeDef huart2;
 
-#ifdef DEBUG_SERIAL_USART3
 #define UART_DMA_CHANNEL DMA1_Channel2
-#endif
-
-#ifdef DEBUG_SERIAL_USART2
-#define UART_DMA_CHANNEL DMA1_Channel7
-#endif
+/*
+ * TODO: Convert this to rosserial
+ */
 
 
 volatile uint8_t uart_buf[100];
 volatile int16_t ch_buf[8];
-//volatile char char_buf[300];
 
 void setScopeChannel(uint8_t ch, int16_t val) {
   ch_buf[ch] = val;

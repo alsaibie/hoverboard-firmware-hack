@@ -14,43 +14,22 @@
 
 // ################################################################################
 
-#define DEBUG_SERIAL_USART2         // left sensor board cable, disable if ADC or PPM is used!
-//#define DEBUG_SERIAL_USART3         // right sensor board cable, disable if I2C (nunchuck) is used!
+#define DEBUG_SERIAL_USART3         //
 #define DEBUG_BAUD       115200     // UART baud rate
-//#define DEBUG_SERIAL_SERVOTERM
 #define DEBUG_SERIAL_ASCII          // human readable output. i.e. "345;1337;0;0\n\r"
-
-//#define DEBUG_I2C_LCD               // standard 16x2 or larger text-lcd via i2c-converter on right sensor board cable
-
 #define TIMEOUT          5          // number of wrong / missing commands before emergency off
 
 // ################################################################################
+// CONTROL VIA PPM RC REMOTE
 
-// ###### CONTROL VIA RC REMOTE ######
-// left sensor board cable. Channel 1: steering, Channel 2: speed. 
-//#define CONTROL_PPM                 // use PPM-Sum as input. disable DEBUG_SERIAL_USART2!
-//#define PPM_NUM_CHANNELS 6          // total number of PPM channels to receive, even if they are not used.
-
-// ###### CONTROL VIA TWO POTENTIOMETERS ######
-// ADC-calibration to cover the full poti-range: connect potis to left sensor board cable (0 to 3.3V), watch UART on the right sensor board cable. the first 2 values are ADC1 and ADC2. write minimum and maximum poti position-values to ADC?_MIN and ADC?_MAX.
-//#define CONTROL_ADC                 // use ADC as input. disable DEBUG_SERIAL_USART2!
-//#define ADC1_MIN 0                  // min ADC1-value while poti at minimum-position (0 - 4095)
-//#define ADC1_MAX 4095               // max ADC1-value while poti at maximum-position (0 - 4095)
-//#define ADC2_MIN 0                  // min ADC2-value while poti at minimum-position (0 - 4095)
-//#define ADC2_MAX 4095               // max ADC2-value while poti at maximum-position (0 - 4095)
-
-// ###### CONTROL VIA NINTENDO NUNCHUCK ######
-// left sensor board cable. keep cable short, use shielded cable, use ferrits, stabalize voltage in nunchuck, use the right one of the 2 types of nunchucks, add i2c pullups.
-#define CONTROL_NUNCHUCK            // use nunchuck as input. disable DEBUG_SERIAL_USART3!
+// left sensor board cable. Channel 1: Motor A, Channel 2: Motor B OR Ch1: Throttle Ch2: Steer
+#define DIFFERENTIAL_DRIVE 1
+#define INDEPENDENT_STEER 2
+#define PPM_CONTROL_MODE DIFFERENTIAL_DRIVE
+#define PPM_NUM_CHANNELS 6          // total number of PPM channels to receive, even if they are not used.
 
 // ################################################################################
-
-// ###### DRIVING BEHAVIOR ######
-
-// inputs:
-// - cmd1 and cmd2: analog normalized input values. -1000 to 1000
-// - button1 and button2: digital input values. 0 or 1
-// - adc_buffer.l_tx2 and adc_buffer.l_rx2: unfiltered ADC values (you do not need them). 0 to 4095
+// DRIVING BEHAVIOR
 // outputs:
 // - speedR and speedL: normal driving -1000 to 1000
 // - weakr and weakl: field weakening for extra boost at high speed (speedR > 700 and speedL > 700). 0 to ~400
@@ -58,8 +37,8 @@
 #define FILTER              0.1  // lower value == softer filter. do not use values <0.01, you will get float precision issues.
 #define SPEED_COEFFICIENT   0.5  // higher value == stronger. 0.0 to 1.0
 #define STEER_COEFFICIENT   0.5  // higher value == stronger. if you do not want any steering, set it to 0.0; 0.0 to 1.0
-//#define INVERT_R_DIRECTION
-//#define INVERT_L_DIRECTION
+#define L_DIRECTION_INVERSION 1  // -1 or 1
+#define R_DIRECTION_INVERSION 1  //
 
 //Turbo boost at high speeds while button1 is pressed:
 //#define ADDITIONAL_CODE \

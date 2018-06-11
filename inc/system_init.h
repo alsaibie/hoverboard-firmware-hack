@@ -21,11 +21,13 @@
 
 #pragma once
 
-#include "stm32f1xx_hal.h"
-
+void System_Init();
+void Interrupt_Priority_Init(void);
+void SystemClock_Init(void);
 void MX_GPIO_Init(void);
 void MX_TIM_Init(void);
 void MX_ADC1_Init(void);
 void MX_ADC2_Init(void);
+void ADC_Start(void);
 void UART_Init(void);
-void I2C_Init();
+
